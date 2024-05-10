@@ -84,7 +84,12 @@ func S() {
 		os.Exit(1)
 	}
 
-	passphrase := fetchPassphrase()
+	var passphrase []byte
+	if cliOpt.pp == "" {
+		passphrase = fetchPassphrase()
+	} else {
+		passphrase = []byte(cliOpt.pp)
+	}
 
 	sec, err := ReadSecKey(cliOpt.secKey, passphrase)
 	if err != nil {
@@ -129,7 +134,7 @@ func S() {
 	comment := CreateGZipComment(cliOpt.cmt, cliOpt.secKey, s)
 
 	// write new gzip file with our comment and signature
-	fout, err := os.OpenFile(cliOpt.fout, os.O_RDWR|os.O_CREATE, 0644)
+	fout, err := os.OpenFile(cliOpt.fout, os.O_RDWR|os.O_CREATE, 0o644)
 	if err != nil {
 		fmt.Printf("Failed to write gzip output: %v", err)
 		os.Exit(1)
@@ -219,5 +224,3 @@ func V() {
 		fmt.Println("Failed")
 	}
 }
-
-
