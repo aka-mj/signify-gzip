@@ -222,5 +222,6 @@ func V() {
 		fmt.Println("Verified")
 	} else {
 		fmt.Println("Failed")
+		os.Exit(1)
 	}
 }
