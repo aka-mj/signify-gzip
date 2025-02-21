@@ -4,12 +4,12 @@ go 1.20
 
 require (
 	gitlab.com/michaeljohn/bcrypt_pbkdf v1.0.1
-	golang.org/x/crypto v0.17.0
-	golang.org/x/term v0.15.0
-	lukechampine.com/blake3 v1.1.7
+	golang.org/x/crypto v0.33.0
+	golang.org/x/term v0.29.0
+	lukechampine.com/blake3 v1.3.0
 )
 
 require (
-	github.com/klauspost/cpuid/v2 v2.2.4 // indirect
-	golang.org/x/sys v0.15.0 // indirect
+	github.com/klauspost/cpuid/v2 v2.2.9 // indirect
+	golang.org/x/sys v0.30.0 // indirect
 )
