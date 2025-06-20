@@ -1,6 +1,6 @@
 module signify-gzip
 
-go 1.22
+go 1.23
 
 require (
 	gitlab.com/michaeljohn/bcrypt_pbkdf v1.0.1
