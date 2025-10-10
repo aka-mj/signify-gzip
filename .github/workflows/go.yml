@@ -6,6 +6,8 @@ name: Go
 on:
   push:
     branches: [ "master" ]
+    tags:
+      - 'v*'
   pull_request:
     branches: [ "master" ]
 
@@ -71,3 +73,11 @@ jobs:
       with:
         name: signify-gzip-${{ matrix.goos }}-${{ matrix.goarch }}${{ matrix.goarm && format('v{0}', matrix.goarm) || '' }}
         path: signify-gzip-*
+
+    - name: Upload to release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: signify-gzip-*
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
