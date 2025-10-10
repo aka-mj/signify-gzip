@@ -11,7 +11,7 @@ on:
 
 jobs:
 
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -21,8 +21,58 @@ jobs:
       with:
         go-version: '1.23'
 
-    - name: Build
-      run: go build -v ./...
-
     - name: Test
       run: go test -v ./...
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          # Linux builds
+          - goos: linux
+            goarch: amd64
+          - goos: linux
+            goarch: arm64
+          - goos: linux
+            goarch: arm
+            goarm: 7
+          # macOS builds
+          - goos: darwin
+            goarch: amd64
+          - goos: darwin
+            goarch: arm64
+          # Windows builds
+          - goos: windows
+            goarch: amd64
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.23'
+
+    - name: Build
+      env:
+        GOOS: ${{ matrix.goos }}
+        GOARCH: ${{ matrix.goarch }}
+        GOARM: ${{ matrix.goarm }}
+      run: |
+        if [ "${{ matrix.goarm }}" != "" ]; then
+          OUTPUT_NAME=signify-gzip-${{ matrix.goos }}-${{ matrix.goarch }}v${{ matrix.goarm }}
+        else
+          OUTPUT_NAME=signify-gzip-${{ matrix.goos }}-${{ matrix.goarch }}
+        fi
+        if [ "${{ matrix.goos }}" = "windows" ]; then
+          OUTPUT_NAME="${OUTPUT_NAME}.exe"
+        fi
+        go build -v -o "$OUTPUT_NAME" .
+        ls -lh "$OUTPUT_NAME"
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: signify-gzip-${{ matrix.goos }}-${{ matrix.goarch }}${{ matrix.goarm && format('v{0}', matrix.goarm) || '' }}
+        path: signify-gzip-*
