@@ -38,11 +38,6 @@ jobs:
           - goos: linux
             goarch: arm
             goarm: 7
-          # macOS builds
-          - goos: darwin
-            goarch: amd64
-          - goos: darwin
-            goarch: arm64
           # Windows builds
           - goos: windows
             goarch: amd64
