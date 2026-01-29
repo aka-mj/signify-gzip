@@ -12,7 +12,7 @@ import (
 	"lukechampine.com/blake3"
 )
 
-const VERSION = "0.0.1"
+const VERSION = "1.0.2"
 
 func main() {
 	parseCliOptions()
@@ -55,12 +55,12 @@ func G() {
 		os.Exit(1)
 	}
 
-	if err := WriteSecKey(sec, passphrase); err != nil {
+	if err := WriteSecKey(sec, passphrase, cliOpt.cmt); err != nil {
 		fmt.Printf("Failed to write secret key: %v", err)
 		os.Exit(1)
 	}
 
-	if err := WritePubKey(pub); err != nil {
+	if err := WritePubKey(pub, cliOpt.cmt); err != nil {
 		fmt.Printf("Failed to write public key: %v", err)
 		os.Exit(1)
 	}

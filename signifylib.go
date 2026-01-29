@@ -132,7 +132,7 @@ func CreateGZipComment(comment, secKey string, s *Signature) string {
 	return commentBuf.String()
 }
 
-func WriteSecKey(key *PrivateKey, passphrase []byte) error {
+func WriteSecKey(key *PrivateKey, passphrase []byte, comment string) error {
 	f, err := os.OpenFile(cliOpt.secKey, os.O_RDWR|os.O_CREATE, 0600)
 	if err != nil {
 		return err
@@ -144,17 +144,23 @@ func WriteSecKey(key *PrivateKey, passphrase []byte) error {
 		return err
 	}
 
-	return writeFile(f, "secret key", msec)
+	if comment == "" {
+		comment = "signify secret key"
+	}
+	return writeFile(f, comment, msec)
 }
 
-func WritePubKey(key *PublicKey) error {
+func WritePubKey(key *PublicKey, comment string) error {
 	f, err := os.OpenFile(cliOpt.pubKey, os.O_RDWR|os.O_CREATE, 0662)
 	if err != nil {
 		return err
 	}
 	defer f.Close()
 
-	return writeFile(f, "public key", MarshalPublicKey(key))
+	if comment == "" {
+		comment = "signify public key"
+	}
+	return writeFile(f, comment, MarshalPublicKey(key))
 }
 
 func writeFile(w io.Writer, comment string, content []byte) error {

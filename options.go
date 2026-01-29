@@ -46,6 +46,6 @@ func helpText() {
 	fmt.Println(`
      signify-gzip -G [-n] [-c comment] -p pubkey -s seckey
      signify-gzip -S [-n] [-passphrase phrase] -s seckey -fin input-file -fout output-file
-     signify-gzip -V [-q] -p pubkey -fin input-file
+     signify-gzip -V -p pubkey -fin input-file
 	`)
 }
